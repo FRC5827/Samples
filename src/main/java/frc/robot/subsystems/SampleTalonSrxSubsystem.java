@@ -2,19 +2,19 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public final class SampleFalcon500Subsystem extends SubsystemBase {
-    private final WPI_TalonFX m_motor = new WPI_TalonFX (48);
+public final class SampleTalonSrxSubsystem extends SubsystemBase {
+    private final WPI_TalonSRX m_motor = new WPI_TalonSRX(45);
     private final PIDController m_pid = new PIDController(.3, 0.01, 0.01 );
 
     private double m_speed;
-
-    public SampleFalcon500Subsystem() {
+    
+    public SampleTalonSrxSubsystem() {
         m_motor.setNeutralMode(NeutralMode.Coast);
         m_pid.setSetpoint(0);
     }
