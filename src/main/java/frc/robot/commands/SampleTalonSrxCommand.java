@@ -13,16 +13,11 @@ import frc.robot.subsystems.SampleTalonSrxSubsystem;
 
 public class SampleTalonSrxCommand extends CommandBase {
 
+    private final SampleTalonSrxSubsystem m_subsystem;
+
     private final XboxController m_controller;
-    private final int m_translationAxis;
-    private final int m_strafeAxis;
-    private final int m_rotationAxis;
 
-    private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(Constants.kJoystickSlewRate);
-    private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(Constants.kJoystickSlewRate);
     private final SlewRateLimiter rSpeedLimiter = new SlewRateLimiter(Constants.kJoystickSlewRate);
-
-    SampleTalonSrxSubsystem m_subsystem;
 
     // Driver control
     public SampleTalonSrxCommand(SampleTalonSrxSubsystem subsystem, XboxController controller)
@@ -31,38 +26,20 @@ public class SampleTalonSrxCommand extends CommandBase {
 
         m_subsystem = subsystem;
         m_controller = controller;
-        m_translationAxis = XboxController.Axis.kLeftY.value;
-        m_strafeAxis = XboxController.Axis.kLeftX.value;
-        m_rotationAxis = XboxController.Axis.kRightX.value;
     }
 
     @Override
     public void execute() {
-        // xbox controller provides negative values when pushing forward (y axis), so negate
-        // negate strafe (left/right x axis stick) as we want positive when pushing left (positive y on field)
-        // negate rotation as we want positive value when when pushing left (CCW is postive)
-        double yAxis = -m_controller.getRawAxis(m_translationAxis);
-        double xAxis = -m_controller.getRawAxis(m_strafeAxis);
-        double rAxis = -m_controller.getRawAxis(m_rotationAxis);
+
+        double rAxis = m_controller.getRawAxis(XboxController.Axis.kRightX.value);
 
         // apply deadband
-        yAxis = (Math.abs(yAxis) < Constants.kJoystickDeadband) ? 0 : yAxis;
-        xAxis = (Math.abs(xAxis) < Constants.kJoystickDeadband) ? 0 : xAxis;
         rAxis = (Math.abs(rAxis) < Constants.kJoystickDeadband) ? 0 : rAxis;
 
         // curve inputs
-        yAxis = Math.abs(yAxis) * Math.abs(yAxis) * yAxis;
-        xAxis = Math.abs(xAxis) * Math.abs(xAxis) * xAxis;
-        rAxis = Math.abs(rAxis) * Math.abs(rAxis) * rAxis;
-
-        // uncomment to scale down output
-        //yAxis *= 0.5;
-        //xAxis *= 0.5;
-        //rAxis *= 0.5;
+        rAxis = rAxis * rAxis * rAxis;
 
         // slew rate limiter
-        yAxis = ySpeedLimiter.calculate(yAxis);
-        xAxis = xSpeedLimiter.calculate(xAxis);
         rAxis = rSpeedLimiter.calculate(rAxis);
         
         m_subsystem.setSpeed(rAxis);
