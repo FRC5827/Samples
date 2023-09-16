@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public final class SampleTalonSrxSubsystem extends SubsystemBase {
     private final WPI_TalonSRX m_motor = new WPI_TalonSRX(45);
     private final PIDController m_pid = new PIDController(.3, 0.01, 0.01 );
-
-    private double m_speed;
     
     public SampleTalonSrxSubsystem() {
         m_motor.setNeutralMode(NeutralMode.Coast);
@@ -29,7 +27,6 @@ public final class SampleTalonSrxSubsystem extends SubsystemBase {
 
     public void setSpeed(double speed) {
         double calculatedSpeed = MathUtil.clamp(speed, -1, 1);    
-        m_speed = calculatedSpeed;
         m_pid.setSetpoint(calculatedSpeed);
     }
 }

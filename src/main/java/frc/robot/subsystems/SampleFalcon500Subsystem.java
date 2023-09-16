@@ -12,8 +12,6 @@ public final class SampleFalcon500Subsystem extends SubsystemBase {
     private final WPI_TalonFX m_motor = new WPI_TalonFX (48);
     private final PIDController m_pid = new PIDController(.3, 0.01, 0.01 );
 
-    private double m_speed;
-
     public SampleFalcon500Subsystem() {
         m_motor.setNeutralMode(NeutralMode.Coast);
         m_pid.setSetpoint(0);
@@ -29,7 +27,6 @@ public final class SampleFalcon500Subsystem extends SubsystemBase {
 
     public void setSpeed(double speed) {
         double calculatedSpeed = MathUtil.clamp(speed, -1, 1);    
-        m_speed = calculatedSpeed;
         m_pid.setSetpoint(calculatedSpeed);
     }
 }
