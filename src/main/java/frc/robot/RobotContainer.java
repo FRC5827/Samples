@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.RunMotorCommand;
 import frc.robot.commands.SampleFalcon500Command;
 import frc.robot.commands.SampleSparkMaxCommand;
 import frc.robot.commands.SampleTalonSrxCommand;
@@ -28,7 +30,7 @@ public class RobotContainer {
     private final SampleFalcon500Subsystem m_subsystem1;
     private final SampleSparkMaxSubsystem m_subsystem2;
     private final SampleTalonSrxSubsystem m_subsystem3;
-
+    
     /**
      * The container for the robot. Contains subsystems, IO devices, and commands.
      */
@@ -41,5 +43,8 @@ public class RobotContainer {
 
         m_subsystem3 = new SampleTalonSrxSubsystem();
         m_subsystem3.setDefaultCommand(new SampleTalonSrxCommand(m_subsystem3, m_driverInput));
+
+        var button = new JoystickButton(m_driverInput, XboxController.Button.kA.value);
+        button.whileTrue(new RunMotorCommand(m_subsystem1));
     }
 }

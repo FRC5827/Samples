@@ -10,10 +10,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public final class SampleFalcon500Subsystem extends SubsystemBase {
     private final WPI_TalonFX m_motor = new WPI_TalonFX (48);
-    private final PIDController m_pid = new PIDController(.3, 0.01, 0.01 );
+    private final PIDController m_pid = new PIDController(.3, 0, 0 );
 
     public SampleFalcon500Subsystem() {
-        m_motor.setNeutralMode(NeutralMode.Coast);
+        m_motor.setNeutralMode(NeutralMode.Brake);
         m_pid.setSetpoint(0);
     }
 
