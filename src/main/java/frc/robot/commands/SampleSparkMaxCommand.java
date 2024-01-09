@@ -6,12 +6,12 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Constants;
 import frc.robot.subsystems.SampleSparkMaxSubsystem;
 
-public class SampleSparkMaxCommand extends CommandBase {
+public class SampleSparkMaxCommand extends Command {
 
     private final SampleSparkMaxSubsystem m_subsystem;
 

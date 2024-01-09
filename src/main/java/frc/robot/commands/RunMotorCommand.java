@@ -4,12 +4,12 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.Timer;
 
 import frc.robot.subsystems.SampleFalcon500Subsystem;
 
-public class RunMotorCommand extends CommandBase {
+public class RunMotorCommand extends Command {
 
     private final SampleFalcon500Subsystem m_subsystem;
 
@@ -29,7 +29,7 @@ public class RunMotorCommand extends CommandBase {
         m_timer.reset();
         m_timer.start();
 
-        m_subsystem.setSpeed(4.0);
+        m_subsystem.setSpeed(0.6);
     }
 
     @Override

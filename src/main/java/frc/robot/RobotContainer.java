@@ -28,8 +28,8 @@ public class RobotContainer {
     private final XboxController m_driverInput = new XboxController(0);
 
     private final SampleFalcon500Subsystem m_subsystem1;
-    private final SampleSparkMaxSubsystem m_subsystem2;
-    private final SampleTalonSrxSubsystem m_subsystem3;
+    // private final SampleSparkMaxSubsystem m_subsystem2;
+    // private final SampleTalonSrxSubsystem m_subsystem3;
     
     /**
      * The container for the robot. Contains subsystems, IO devices, and commands.
@@ -38,11 +38,11 @@ public class RobotContainer {
         m_subsystem1 = new SampleFalcon500Subsystem();
         m_subsystem1.setDefaultCommand(new SampleFalcon500Command(m_subsystem1, m_driverInput));
 
-        m_subsystem2 = new SampleSparkMaxSubsystem();
-        m_subsystem2.setDefaultCommand(new SampleSparkMaxCommand(m_subsystem2, m_driverInput));
+        // m_subsystem2 = new SampleSparkMaxSubsystem();
+        // m_subsystem2.setDefaultCommand(new SampleSparkMaxCommand(m_subsystem2, m_driverInput));
 
-        m_subsystem3 = new SampleTalonSrxSubsystem();
-        m_subsystem3.setDefaultCommand(new SampleTalonSrxCommand(m_subsystem3, m_driverInput));
+        // m_subsystem3 = new SampleTalonSrxSubsystem();
+        // m_subsystem3.setDefaultCommand(new SampleTalonSrxCommand(m_subsystem3, m_driverInput));
 
         var button = new JoystickButton(m_driverInput, XboxController.Button.kA.value);
         button.whileTrue(new RunMotorCommand(m_subsystem1));
