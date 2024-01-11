@@ -9,17 +9,17 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Constants;
-import frc.robot.subsystems.SampleFalcon500Subsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class SampleFalcon500Command extends Command {
 
-    private final SampleFalcon500Subsystem m_subsystem;
+    private final ShooterSubsystem m_subsystem;
     
     private final XboxController m_controller;
 
     private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(Constants.kJoystickSlewRate);
 
-    public SampleFalcon500Command(SampleFalcon500Subsystem subsystem, XboxController controller)
+    public SampleFalcon500Command(ShooterSubsystem subsystem, XboxController controller)
     {
         addRequirements(subsystem);
 

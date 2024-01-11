@@ -5,12 +5,15 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.RunMotorCommand;
+import frc.robot.commands.ShooterCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.SampleFalcon500Command;
 import frc.robot.commands.SampleSparkMaxCommand;
 import frc.robot.commands.SampleTalonSrxCommand;
-import frc.robot.subsystems.SampleFalcon500Subsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.SampleSparkMaxSubsystem;
 import frc.robot.subsystems.SampleTalonSrxSubsystem;
 
@@ -27,24 +30,27 @@ public class RobotContainer {
     // Controllers
     private final XboxController m_driverInput = new XboxController(0);
 
-    private final SampleFalcon500Subsystem m_subsystem1;
-    // private final SampleSparkMaxSubsystem m_subsystem2;
-    // private final SampleTalonSrxSubsystem m_subsystem3;
+    private final ShooterSubsystem m_shooterMotors;
     
     /**
      * The container for the robot. Contains subsystems, IO devices, and commands.
      */
     public RobotContainer() {
-        m_subsystem1 = new SampleFalcon500Subsystem();
-        m_subsystem1.setDefaultCommand(new SampleFalcon500Command(m_subsystem1, m_driverInput));
 
-        // m_subsystem2 = new SampleSparkMaxSubsystem();
-        // m_subsystem2.setDefaultCommand(new SampleSparkMaxCommand(m_subsystem2, m_driverInput));
+        double shooterSpeed = 0.65;
+        double intakeSpeed = -0.2;
 
-        // m_subsystem3 = new SampleTalonSrxSubsystem();
-        // m_subsystem3.setDefaultCommand(new SampleTalonSrxCommand(m_subsystem3, m_driverInput));
+        SmartDashboard.putNumber("shooterSpeed", shooterSpeed);
+        SmartDashboard.putNumber("intakeSpeed", intakeSpeed);
 
-        var button = new JoystickButton(m_driverInput, XboxController.Button.kA.value);
-        button.whileTrue(new RunMotorCommand(m_subsystem1));
+        // Shooter motors
+        m_shooterMotors = new ShooterSubsystem();
+        m_shooterMotors.setDefaultCommand(new SampleFalcon500Command(m_shooterMotors, m_driverInput));
+
+        var kA_button = new JoystickButton(m_driverInput, XboxController.Button.kA.value);
+        kA_button.whileTrue(new ShooterCommand(m_shooterMotors, shooterSpeed));
+
+        var kX_button = new JoystickButton(m_driverInput, XboxController.Button.kX.value);
+        kX_button.whileTrue(new IntakeCommand(m_shooterMotors, intakeSpeed));
     }
 }
