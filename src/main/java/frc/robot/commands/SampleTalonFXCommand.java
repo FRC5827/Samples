@@ -9,17 +9,17 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import frc.robot.Constants;
-import frc.robot.subsystems.SampleSparkMaxSubsystem;
+import frc.robot.subsystems.SampleTalonFXSubsystem;
 
-public class SampleSparkMaxCommand extends Command {
+public class SampleTalonFXCommand extends Command {
 
-    private final SampleSparkMaxSubsystem m_subsystem;
-
+    private final SampleTalonFXSubsystem m_subsystem;
+    
     private final XboxController m_controller;
 
-    private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(Constants.kJoystickSlewRate);
+    private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(Constants.kJoystickSlewRate);
 
-    public SampleSparkMaxCommand(SampleSparkMaxSubsystem subsystem, XboxController controller)
+    public SampleTalonFXCommand(SampleTalonFXSubsystem subsystem, XboxController controller)
     {
         addRequirements(subsystem);
 
@@ -29,17 +29,18 @@ public class SampleSparkMaxCommand extends Command {
 
     @Override
     public void execute() {
-        double xAxis = m_controller.getRawAxis(XboxController.Axis.kLeftX.value);
+        
+        double yAxis = m_controller.getRawAxis(XboxController.Axis.kLeftY.value);
 
         // apply deadband
-        xAxis = (Math.abs(xAxis) < Constants.kJoystickDeadband) ? 0 : xAxis;
+        yAxis = (Math.abs(yAxis) < Constants.kJoystickDeadband) ? 0 : yAxis;
 
         // curve inputs
-        xAxis = xAxis * xAxis * xAxis;
+        yAxis = yAxis * yAxis * yAxis;
 
         // slew rate limiter
-        xAxis = xSpeedLimiter.calculate(xAxis);
+        yAxis = ySpeedLimiter.calculate(yAxis);
         
-        m_subsystem.setSpeed(xAxis);
+        m_subsystem.setSpeed(yAxis);
     }
 }

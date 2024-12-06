@@ -4,12 +4,12 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.Timer;
 
 import frc.robot.subsystems.SampleFalcon500Subsystem;
 
-public class RunMotorCommand extends CommandBase {
+public class RunMotorCommand extends Command {
 
     private final SampleFalcon500Subsystem m_subsystem;
 

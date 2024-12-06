@@ -1,26 +1,34 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.ClosedLoopConfig.ClosedLoopSlot;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public final class SampleSparkMaxSubsystem extends SubsystemBase {
-    private final CANSparkMax m_motor;
-    private final SparkMaxPIDController m_pidController;
+    private final SparkMax m_motor;
+    private final SparkMaxConfig m_config;
     private final RelativeEncoder m_encoder;
+    private final SparkClosedLoopController m_pidController;
 
     public double m_speed;
     public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM;
     
     public SampleSparkMaxSubsystem() {
-        
-        m_motor = new CANSparkMax(47, MotorType.kBrushless);
-        m_pidController = m_motor.getPIDController();
+        m_motor = new SparkMax(47, MotorType.kBrushless);
+        m_config = new SparkMaxConfig();
         m_encoder = m_motor.getEncoder();
+        m_pidController = m_motor.getClosedLoopController();
 
         // kP = 6e-5; 
         kI = 0;
@@ -32,12 +40,12 @@ public final class SampleSparkMaxSubsystem extends SubsystemBase {
         maxRPM = 5700;
     
         // set PID coefficients
-        m_pidController.setP(kP);
-        m_pidController.setI(kI);
-        m_pidController.setD(kD);
-        m_pidController.setIZone(kIz);
-        m_pidController.setFF(kFF);
-        m_pidController.setOutputRange(kMinOutput, kMaxOutput);
+        m_config.idleMode(IdleMode.kBrake);
+        m_config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                           .pidf(kP, kI, kD, kFF, ClosedLoopSlot.kSlot0)
+                           .iZone(kIz)
+                           .outputRange(kMinOutput, kMaxOutput);
+        m_motor.configure(m_config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     
         // display PID coefficients on SmartDashboard
         SmartDashboard.putNumber("P Gain", kP);
@@ -62,26 +70,27 @@ public final class SampleSparkMaxSubsystem extends SubsystemBase {
         double min = SmartDashboard.getNumber("Min Output", 0);
 
         // if PID coefficients on SmartDashboard have changed, write new values to controller
-        if((p != kP)) { m_pidController.setP(p); kP = p; }
-        if((i != kI)) { m_pidController.setI(i); kI = i; }
-        if((d != kD)) { m_pidController.setD(d); kD = d; }
-        if((iz != kIz)) { m_pidController.setIZone(iz); kIz = iz; }
-        if((ff != kFF)) { m_pidController.setFF(ff); kFF = ff; }
-        if((max != kMaxOutput) || (min != kMinOutput)) { 
-            m_pidController.setOutputRange(min, max); 
-            kMinOutput = min; kMaxOutput = max; 
-
-           m_pidController.setReference(m_speed, CANSparkMax.ControlType.kVelocity);                
+        if(p != kP || i != kI || d != kD || iz != kIz || ff != kFF || max != kMaxOutput || min != kMinOutput) {
+            kP = p;
+            kI = i;
+            kD = d;
+            kIz = iz;
+            kFF = ff;
+            kMaxOutput = max;
+            kMinOutput = min;
+            m_config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                           .pidf(kP, kI, kD, kFF, ClosedLoopSlot.kSlot0)
+                           .iZone(kIz)
+                           .outputRange(kMinOutput, kMaxOutput);
+            m_motor.configure(m_config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         }
-
-        double setPoint = m_speed * maxRPM;
-        m_pidController.setReference(setPoint, CANSparkMax.ControlType.kVelocity);
         
-        SmartDashboard.putNumber("SetPoint", setPoint);
         SmartDashboard.putNumber("ProcessVariable", m_encoder.getVelocity());
     }
 
     public void setSpeed(double speed) {
         m_speed = speed;
+        m_pidController.setReference(speed * maxRPM, ControlType.kVelocity);
+        SmartDashboard.putNumber("SetPoint", speed * maxRPM);
     }
 }
