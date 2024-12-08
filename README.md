@@ -66,5 +66,3 @@ Note:
   - Disconnect the ethernet cable to the radio/device.
   - Run `ap51-flash.exe <adapter-no> <firmware-file>` (e.g. `ap51-flash.exe 3 firmwareOM5PAN.bin`).
   - Reconnect the ethernet cable. Once the device boots up the program should start flashing the new firmware.
-
-
