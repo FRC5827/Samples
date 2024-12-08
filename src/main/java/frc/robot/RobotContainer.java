@@ -4,14 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.RunMotorCommand;
-import frc.robot.commands.SampleTalonFXCommand;
-import frc.robot.commands.SampleSparkMaxCommand;
-import frc.robot.subsystems.SampleSparkMaxSubsystem;
-import frc.robot.subsystems.SampleTalonFXSubsystem;
-
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -22,23 +14,24 @@ import frc.robot.subsystems.SampleTalonFXSubsystem;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    // Controllers
-    private final XboxController m_driverInput = new XboxController(0);
 
-    private final SampleTalonFXSubsystem m_subsystem1;
-    private final SampleSparkMaxSubsystem m_subsystem2;
+    //Class fields go here - hint: what needs to be run and what do we use to run it?
 
     /**
      * The container for the robot. Contains subsystems, IO devices, and commands.
+     * What does a constructor have to do to the class fields?
      */
     public RobotContainer() {
-        m_subsystem1 = new SampleTalonFXSubsystem();
-        m_subsystem1.setDefaultCommand(new SampleTalonFXCommand(m_subsystem1, m_driverInput));
+        
 
-        m_subsystem2 = new SampleSparkMaxSubsystem();
-        m_subsystem2.setDefaultCommand(new SampleSparkMaxCommand(m_subsystem2, m_driverInput));
+        bindButtons(); //Leave this here, this is to make sure that your bindings are used
+    }
 
-        var button = new JoystickButton(m_driverInput, XboxController.Button.kA.value);
-        button.whileTrue(new RunMotorCommand(m_subsystem1));
+    /**
+     * configureButtonBindings method to create the button bindings
+     * Hint: Use the special things that are not booleans (We went on about this for a while in the meetings) to bind buttons
+     */
+    private void bindButtons(){
+
     }
 }

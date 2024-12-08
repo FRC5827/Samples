@@ -13,6 +13,12 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static final double kJoystickDeadband = 0.08;
-    public static final double kJoystickSlewRate = 4.0;
+
+    //In here, you will be declaring constants for things that never change
+    //The two main things you will need are:
+    //Xbox controller port constant: 0
+    //TalonFX motor constant: (will be given soon, just leave it as 0 for now)
+    //You can also have a constant for the motor input value but it is not needed (set it to 1.0 and not 9999999.0 to avoid explosions)
+    //Make sure to use proper convention when making constants
+
 }
